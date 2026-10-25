@@ -23,6 +23,8 @@ foreach($r in $rules){
 }
 $resolver=[Mono.Cecil.DefaultAssemblyResolver]::new();$resolver.AddSearchDirectory($Managed);$resolver.AddSearchDirectory($Output)
 $rp=[Mono.Cecil.ReaderParameters]::new();$rp.AssemblyResolver=$resolver;$rp.InMemory=$true
+$knownResources=[Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
+foreach($resourceName in (Get-Content -LiteralPath (Join-Path $PSScriptRoot 'dados\resource-names.txt') -Encoding UTF8)){[void]$knownResources.Add($resourceName)}
 $script:ilCount=0
 function Patch-Type($t,$name){
  foreach($m in $t.Methods){if(!$m.HasBody){continue};foreach($i in $m.Body.Instructions){
@@ -42,7 +44,7 @@ foreach($name in @('Assembly-CSharp.dll','AeonsEndEngine.dll')){
   if($name -eq 'AeonsEndEngine.dll'){
    for($j=0;$j -lt $a.MainModule.Resources.Count;$j++){
     $r=$a.MainModule.Resources[$j]
-    if($r -is [Mono.Cecil.EmbeddedResource] -and $r.Name.EndsWith('.json',[StringComparison]::OrdinalIgnoreCase)){
+    if($r -is [Mono.Cecil.EmbeddedResource] -and $knownResources.Contains($r.Name)){
      $raw=[Text.Encoding]::UTF8.GetString($r.GetResourceData());$patched=[AdaptiveJson]::Translate($raw)
      if($raw -cne $patched){$a.MainModule.Resources[$j]=[Mono.Cecil.EmbeddedResource]::new($r.Name,$r.Attributes,[Text.Encoding]::UTF8.GetBytes($patched))}
     }
