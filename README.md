@@ -1,12 +1,15 @@
-# Aeon’s End PT-BR — beta 0.4.0
+# Aeon’s End PT-BR — beta 0.4.1
 
 A nova beta amplia a compatibilidade entre versões **Windows/Unity/Mono**: prepara a tradução usando os arquivos da própria instalação. Foi testada na base Steam 21251852 e em uma instalação mais antiga com AeonsEndEngine 1.0.8285.20787. Isso não garante suporte a toda versão existente; APIs incompatíveis são recusadas durante a preparação.
 
-[Baixar a beta 0.4.0 e consultar as instruções](https://github.com/wlissesxz-code/Traducao-AeonsEnd-PTBR/releases/tag/v0.4.0-beta).
+[Baixar a beta 0.4.1 e consultar as instruções](https://github.com/wlissesxz-code/Traducao-AeonsEnd-PTBR/releases/tag/v0.4.1-beta).
 
 Extraia todo o ZIP e execute **Instalar.cmd** com o jogo fechado. Para bibliotecas fora do Steam, informe a pasta que contém AeonsEnd.exe. Inclui backup, restauração e atualização das betas anteriores, desde que os originais estejam preservados. Restaure a tradução antes de atualizar o jogo.
 
 [Instruções completas e limitações](adaptativo/LEIA-ME.md). Fontes dos componentes em `adaptativo/`; o ZIP da release inclui os dicionários, regras e dependências necessários. Baixar apenas o código-fonte do GitHub não substitui o pacote de instalação. Os scripts da revisão anterior permanecem na raiz para referência histórica.
+
+
+**Correção 0.4.1:** resolve o erro `0x80131515` ao carregar as bibliotecas baixadas no Windows. Confere os hashes das duas dependências antes de remover seus bloqueios por download. Baixe e extraia o ZIP completo em uma nova pasta.
 
 ## Documentação da beta 0.3.1 (histórico)
 
