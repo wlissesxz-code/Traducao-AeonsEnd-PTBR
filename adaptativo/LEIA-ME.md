@@ -1,14 +1,18 @@
-# Aeon's End PT-BR — beta 0.4.0 adaptativa
+# Aeon's End PT-BR — beta 0.4.1 adaptativa
 
 Esta revisão amplia a compatibilidade entre versões **Windows com Unity/Mono**. A tradução é preparada a partir das bibliotecas da própria instalação, em vez de substituir arquivos inteiros de uma build específica.
 
 Não significa suporte garantido a todas as versões existentes. Duas bases Windows diferentes foram verificadas: a base Steam da beta 0.3.1 (build 21251852) e uma instalação mais antiga com AeonsEndEngine 1.0.8285.20787. APIs incompatíveis são recusadas na preparação, antes de copiar os resultados. Versões de outros sistemas e versões IL2CPP não são suportadas.
 
+## Correção do erro 0x80131515
+
+Esta revisão confere o SHA-256 das duas bibliotecas incluídas e remove o bloqueio por download apenas desses arquivos antes de carregá-los. Não altera configurações globais do Windows. Se a pasta não permitir essa operação, desbloqueie o ZIP em Propriedades antes de extraí-lo novamente.
+
 ## Instalação e atualização
 
 1. Feche o jogo e extraia todo o ZIP.
 2. Execute `Instalar.cmd`. Se a pasta não for encontrada, cole a pasta que contém `AeonsEnd.exe`. Bibliotecas fora do Steam podem ser informadas manualmente.
-3. Aguarde a mensagem **Beta 0.4.0 instalada**. Abra o jogo normalmente.
+3. Aguarde a mensagem **Beta 0.4.1 instalada**. Abra o jogo normalmente.
 
 O instalador compila o suporte de fonte contra as bibliotecas encontradas e altera somente trechos de texto aprovados. Textos de interface são traduzidos quando aparecem. Não é preciso instalar Python ou baixar componentes adicionais: o processo usa o .NET Framework 4.x do Windows. Reserve cerca de 500 MB livres para preparação e backup.
 
