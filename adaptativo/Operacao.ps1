@@ -102,11 +102,11 @@ try{
    else{Copy-Item -LiteralPath $p.Staged -Destination $p.Dest -Force;if((Hash $p.Dest) -ne $p.TargetHash){throw 'Falha ao conferir cópia final.'}}
   }
   if($Acao -eq 'Instalar'){
-   $record=[ordered]@{format=1;version='0.4.0-beta';files=@($plans | ForEach-Object {[ordered]@{path=$_.Path;original_sha256=$_.OriginalHash;installed_sha256=$_.TargetHash}})} | ConvertTo-Json -Depth 6
+   $record=[ordered]@{format=1;version='0.4.1-beta';files=@($plans | ForEach-Object {[ordered]@{path=$_.Path;original_sha256=$_.OriginalHash;installed_sha256=$_.TargetHash}})} | ConvertTo-Json -Depth 6
    [IO.File]::WriteAllText($journal,$record,[Text.UTF8Encoding]::new($false))
   }else{
    # Keep a record of the restored state so reinstalling remains verifiable.
-   $record=[ordered]@{format=1;version='0.4.0-beta';restored=$true;files=@($plans | ForEach-Object {[ordered]@{path=$_.Path;original_sha256=$_.OriginalHash;installed_sha256=$_.TargetHash}})} | ConvertTo-Json -Depth 6
+   $record=[ordered]@{format=1;version='0.4.1-beta';restored=$true;files=@($plans | ForEach-Object {[ordered]@{path=$_.Path;original_sha256=$_.OriginalHash;installed_sha256=$_.TargetHash}})} | ConvertTo-Json -Depth 6
    [IO.File]::WriteAllText($journal,$record,[Text.UTF8Encoding]::new($false))
   }
  }catch{
@@ -116,7 +116,7 @@ try{
   if($keep){throw "A recuperação precisa de atenção. Cópias anteriores preservadas em $stage. Erro inicial: $failure"}
   throw "Operação cancelada; os arquivos anteriores foram recuperados. Detalhe: $failure"
  }
- if($Acao -eq 'Instalar'){Write-Output 'Beta 0.4.0 instalada. Guarde os backups e o registro na pasta do jogo.'}else{Write-Output 'Arquivos originais restaurados. Backups e registro foram mantidos.'}
+ if($Acao -eq 'Instalar'){Write-Output 'Beta 0.4.1 instalada. Guarde os backups e o registro na pasta do jogo.'}else{Write-Output 'Arquivos originais restaurados. Backups e registro foram mantidos.'}
 }finally{
  if(!$keep -and (Test-Path -LiteralPath $stage)){
   $absolute=[IO.Path]::GetFullPath($stage);$parent=[IO.Path]::GetFullPath($tempBase).TrimEnd('\')+'\'
