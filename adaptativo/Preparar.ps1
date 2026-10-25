@@ -3,6 +3,20 @@ $ErrorActionPreference='Stop'
 $Managed=[IO.Path]::GetFullPath($Managed);$Output=[IO.Path]::GetFullPath($Output)
 if($Managed -eq $Output){throw 'A preparação deve ocorrer em uma pasta separada.'}
 New-Item -ItemType Directory -Path $Output -Force | Out-Null
+# Downloaded ZIPs may propagate Mark of the Web to these .NET libraries.
+# Verify each bundled dependency before removing only its per-file block.
+$dependencyManifest=Get-Content -LiteralPath (Join-Path $PSScriptRoot 'integridade.json') -Raw -Encoding UTF8 | ConvertFrom-Json
+foreach($dependencyName in @('Mono.Cecil.dll','AdaptiveJson.dll')){
+ $dependencyPath=Join-Path $PSScriptRoot $dependencyName
+ $entry=@($dependencyManifest | Where-Object path -ceq $dependencyName)
+ if($entry.Count -ne 1 -or !(Test-Path -LiteralPath $dependencyPath) -or (Get-FileHash -LiteralPath $dependencyPath -Algorithm SHA256).Hash.ToLowerInvariant() -ne $entry[0].sha256){throw "Dependência incompleta ou alterada: $dependencyName. Extraia novamente o ZIP oficial. Nenhum arquivo do jogo foi alterado."}
+}
+# Both hashes must pass before either file is unblocked.
+foreach($dependencyName in @('Mono.Cecil.dll','AdaptiveJson.dll')){
+ $dependencyPath=Join-Path $PSScriptRoot $dependencyName
+ try{Unblock-File -LiteralPath $dependencyPath -ErrorAction Stop}
+ catch{throw "O Windows não permitiu desbloquear $dependencyName. Nas Propriedades do ZIP baixado, marque Desbloquear, aplique e extraia novamente em uma pasta comum. Nenhum arquivo do jogo foi alterado. Detalhe: $($_.Exception.Message)"}
+}
 Add-Type -Path (Join-Path $PSScriptRoot 'Mono.Cecil.dll')
 Add-Type -Path (Join-Path $PSScriptRoot 'AdaptiveJson.dll')
 [AdaptiveJson]::Load((Join-Path $PSScriptRoot 'dados\dictionary.tsv'),(Join-Path $PSScriptRoot 'dados\display-keys.txt'))
